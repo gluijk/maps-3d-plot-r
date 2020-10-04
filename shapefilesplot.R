@@ -35,12 +35,6 @@ library(rgdal)  # readOGR()
 library(viridis)  # perceptually uniform colourmaps
 
 shp=readOGR(dsn="SIGI_MA_ALTIMETRIA_20Line.shp", verbose=T)
-# shp=readOGR(dsn=getwd(), layer="SIGI_MA_ALTIMETRIA_20Line", verbose=T)
-
-# Basic plot of this shape file
-par(mar=c(0,0,0,0))  # number of lines of margin on the four sides of the plot
-plot(shp, col="#f2f2f2", bg="skyblue", lwd=0.25, border=0)
-
 
 # Inspect shapefile object
 summary(shp)
