@@ -52,31 +52,16 @@ bbox(shp)  # X-Y bounding box
 proj4string(shp)  # Projection
 
 
-# Plot shapefile
-# Localización en Lozoya:
-# Lat = 40.955981 = 3°47'57.0"W / Long = -3.799163 = 40°57'21.5"N
-# UTM (Universal Transverse Mercator):
-# East=432744.16, North=4534178.01, Zone=30T
-villa_x=432744.16
-villa_y=4534178.01
-test=data.frame(x=villa_x, y=villa_y)
-coordinates(test)=~ x + y
-proj4string(test)="+init=epsg:28992"
-
+# Plot shapefile object
 # viridis:  opt = (A: magma; B: inferno; C: plasma; D: viridis; E: cividis)
-pdf(file="villapiedra_viridis.pdf")
-spplot(shp, zcol=c('NM_COTA'), lwd=0.05,
-       xlim=bbox(shp)[1, ],
-       ylim=bbox(shp)[2, ],
-       col.regions=viridis(20, opt="D"),
-       sp.layout=list("sp.points", test, pch=13, cex=2, col="black")
-       )
+pdf(file="shapefile_viridis.pdf")
+spplot(shp, zcol=c('NM_COTA'), lwd=0.05, col.regions=viridis(20, opt="D"))
 dev.off()
 
 
 
 ######################################
-# Plot shp with ggplot2
+# Plot shapefile object with ggplot2
 
 # 'fortify' the data to get a dataframe format required by ggplot2
 library(broom)
