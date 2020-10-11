@@ -62,8 +62,8 @@ d=25  # cell size=25m
 i=which(row(sierra)>1 & row(sierra)<ALTO)  # skip first and last row
 pend_ns=sierra*0
 pend_ns[i]=(sierra[i+1]-sierra[i-1])/(2*d)  # calculate N-S slope
-pend_ns[1,]=pend_ns[2,]  # replicate first and last row
-pend_ns[ALTO,]=pend_ns[ALTO-1,]  # replicate first and last row
+pend_ns[1,]=pend_ns[2,]  # replicate first and...
+pend_ns[ALTO,]=pend_ns[ALTO-1,]  # ...last row
 
 # Simetrizamos alrededor de pendiente=0
 PENDMAX=min(abs(min(pend_ns)),max(pend_ns))
@@ -154,10 +154,23 @@ coordinates(test)=~ x + y
 proj4string(test)="+init=epsg:28992"
 
 # Plot shapefile
-# viridis:  opt = A: magma; B: inferno; C: plasma; D: viridis; E: cividis
+# viridis:  opt = A: magma; B: inferno; C: plasma; D: viridis; E: 
 spplot(shp, zcol=c('NM_COTA'), lwd=0.05,
        sp.layout=list("sp.points", test, pch=13, cex=5, lwd=2, col="red"),
        col.regions=viridis(20, opt="D"))
+
+# Comparación con el Puig Campana
+# 1406m = altitud Puig Campana
+ALTMINMAD=min(shp$NM_COTA)
+ALTMAXMAD=max(shp$NM_COTA)
+COLS1MAD=round((1406-ALTMINMAD)/10)
+COLS2MAD=round((ALTMAXMAD-1406)/10)
+nbcol=COLS1MAD+COLS2MAD
+pal=colorRampPalette(c("yellow", "orange", "red"))
+color=c(gray.colors(COLS1MAD, start=0, end=1, gamma=2.2), pal(COLS2MAD))
+spplot(shp, zcol=c('NM_COTA'), lwd=0.05,
+       sp.layout=list("sp.points", test, pch=13, cex=5, lwd=2, col="red"),
+       col.regions=color)
 
 
 # Contour to DEM Raster conversion:
