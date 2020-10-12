@@ -1,5 +1,6 @@
-# Representación de mapas raster y vectoriales con R
+# Procesado de mapas raster y vectoriales con R
 # www.overfitting.net
+
 
 
 # DIBUJANDO MAPA 3D DE ELEVACIONES CON DATOS RASTER
@@ -230,8 +231,7 @@ plot3D(DEM, col=viridis(200, opt="D"), zfac=1)
 
 
 
-########################################################################
-# DISTRIBICIÓN DE ALTITUDES
+# CÁLCULO DISTRIBICIÓN DE ALTITUDES
 
 MINHIST=min(shp$NM_COTA)
 MAXHIST=max(shp$NM_COTA)
@@ -294,7 +294,7 @@ for (i in 1:nrow(df)) {
 }
 
 madrid=t(round(matriz/acum))  # average heights on each cell (NaN if no data)
-image(madrid, col=terrain.colors(100), asp=1)
+image(madrid, col=terrain.colors(100), asp=dim(madrid)[2]/dim(madrid)[1])
 
 altitudes=madrid[is.na(madrid)==F]  # drop NaN (outside of Madrid or no data)
 hist(altitudes,
