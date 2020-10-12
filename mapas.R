@@ -140,6 +140,7 @@ names(shp)  # attributes (=fields=variables)
 summary(shp@data)  # attribute data summary
 class(shp)  # SpatialLinesDataFrame
 length(shp)  # 7239 features (contours)
+crs(shp)  # +proj=utm +zone=30 +ellps=GRS80 +towgs84= (...) +units=m +no_defs
 proj4string(shp)  # projection (UTM)
 bbox(shp)  # X-Y bounding box in UTM coordinates
 
@@ -192,11 +193,12 @@ spplot(shp_crop, zcol=c('NM_COTA'), lwd=0.05,
 # Interpolamos raster a partir de los datos vectoriales
 # 1) Create a blank raster grid to interpolate the elevation data onto
 dem_bbox=bbox(shp_crop)  # obtain extent
-dem_rast=raster(nrows=200, ncols=200,  # create raster grid
-                   xmn=dem_bbox[1, 1], 
-                   xmx=ceiling(dem_bbox[1, 2]),
-                   ymn=dem_bbox[2, 1], 
-                   ymx=ceiling(dem_bbox[2, 2]))
+ANCHO_INTERP=200
+dem_rast=raster(nrows=ANCHO_INTERP, ncols=ANCHO_INTERP,  # create raster grid
+                xmn=dem_bbox[1, 1], 
+                xmx=ceiling(dem_bbox[1, 2]),
+                ymn=dem_bbox[2, 1], 
+                ymx=ceiling(dem_bbox[2, 2]))
 
 projection(dem_rast)=CRS(projection(shp_crop))  # set projection
 dim(dem_rast)
@@ -225,3 +227,152 @@ plot(contour_plot, add=T, lwd=0.1)
 
 # Plot 3D DEM using rgl
 plot3D(DEM, col=viridis(200, opt="D"), zfac=1)
+
+
+
+########################################################################
+# DISTRIBICIÓN DE ALTITUDES
+
+MINHIST=min(shp$NM_COTA)
+MAXHIST=max(shp$NM_COTA)
+
+# (1/4)
+# Distr. altitudes Comunidad de Madrid - CON 7239 CURVAS EN SHAPEFILE
+hist(shp$NM_COTA,
+     breaks=100, xlim=c(MINHIST, MAXHIST),
+     main=paste0("Distr. altitudes Comunidad de Madrid (",
+                 length(shp)," curvas)"),
+     xlab=paste0("min / mediana / media / max = ",
+                 round(min(shp$NM_COTA)), "m / ",
+                 round(median(shp$NM_COTA)), "m / ",
+                 round(mean(shp$NM_COTA)), "m / ",
+                 round(max(shp$NM_COTA)), "m"))
+abline(v=median(shp$NM_COTA), col='red', lty='dashed', lwd=3)
+abline(v=mean(shp$NM_COTA), col='red', lty='dashed', lwd=3)
+
+# Convertimos curvas de nivel a puntos
+dem_points=as(shp, "SpatialPointsDataFrame")
+
+
+# (2/4)
+# Distr. altitudes Comunidad de Madrid - CON 888804 PUNTOS EN SHAPEFILE
+hist(dem_points$NM_COTA,
+     breaks=100, xlim=c(MINHIST, MAXHIST),
+     main=paste0("Distr. altitudes Comunidad de Madrid (",
+                 length(dem_points)," puntos)"),
+     xlab=paste0("min / mediana / media / max = ",
+                 round(min(dem_points$NM_COTA)), "m / ",
+                 round(median(dem_points$NM_COTA)), "m / ",
+                 round(mean(dem_points$NM_COTA)), "m / ",
+                 round(max(dem_points$NM_COTA)), "m"))
+abline(v=median(dem_points$NM_COTA), col='red', lty='dashed', lwd=3)
+abline(v=mean(dem_points$NM_COTA), col='red', lty='dashed', lwd=3)
+
+
+
+# (3/4)
+# Distr. altitudes Comunidad de Madrid - CON 8141 PROMEDIOS RASTER
+df=as.data.frame(dem_points)
+head(df)
+
+FACTOR=1000
+MINX=min(df$coords.x1)
+MAXX=max(df$coords.x1)
+MINY=min(df$coords.x2)
+MAXY=max(df$coords.x2)
+
+WIDTH=round((MAXX-MINX)/FACTOR)+1
+HEIGHT=round((MAXY-MINY)/FACTOR)+1
+matriz=matrix(0, ncol=WIDTH, nrow=HEIGHT)
+acum=matrix(0, ncol=WIDTH, nrow=HEIGHT)
+
+for (i in 1:nrow(df)) {
+    x=round((df$coords.x1[i]-MINX)/FACTOR)+1
+    y=round((df$coords.x2[i]-MINY)/FACTOR)+1
+    matriz[y,x]=matriz[y,x]+df$NM_COTA[i]
+    acum[y,x]=acum[y,x]+1
+}
+
+madrid=t(round(matriz/acum))  # average heights on each cell (NaN if no data)
+image(madrid, col=terrain.colors(100), asp=1)
+
+altitudes=madrid[is.na(madrid)==F]  # drop NaN (outside of Madrid or no data)
+hist(altitudes,
+     breaks=100, xlim=c(MINHIST, MAXHIST),
+     main=paste0("Distr. altitudes Comunidad de Madrid (",
+                 length(madrid)," celdas promediadas)"),
+     xlab=paste0("min / mediana / media / max = ",
+                 round(min(altitudes)), "m / ",
+                 round(median(altitudes)), "m / ",
+                 round(mean(altitudes)), "m / ",
+                 round(max(altitudes)), "m"))
+abline(v=median(altitudes), col='red', lty='dashed', lwd=3)
+abline(v=mean(altitudes), col='red', lty='dashed', lwd=3)
+
+df2=as.matrix(DEM)
+r=raster(
+    madrid,
+    xmn=1, xmx=nrow(madrid),
+    ymn=1, ymx=ncol(madrid), 
+    crs=CRS("+proj=utm +zone=11 +datum=NAD83")
+)
+
+plot3D(r, col=viridis(200, opt="D"), zfac=0.5)
+plot3D(DEM, col=viridis(200, opt="D"), zfac=0.5)
+
+
+# (4/4)
+# Distr. altitudes Comunidad de Madrid - CON 8141 INTERPOLACIONES RASTER
+
+# Interpolamos raster a partir de los datos vectoriales
+# 1) Create a blank raster grid to interpolate the elevation data onto
+dem_bbox=bbox(shp)  # obtain extent
+ANCHO_INTERP=2000
+dem_rast=raster(nrows=ANCHO_INTERP, ncols=round(ANCHO_INTERP*
+                    (dem_bbox[1, 2]-dem_bbox[1, 1])/
+                    (dem_bbox[2, 2]-dem_bbox[2, 1])),  # create raster grid
+                xmn=dem_bbox[1, 1], 
+                xmx=ceiling(dem_bbox[1, 2]),
+                ymn=dem_bbox[2, 1], 
+                ymx=ceiling(dem_bbox[2, 2]))
+
+projection(dem_rast)=CRS(projection(shp))  # set projection
+dim(dem_rast)
+
+
+# 2) Convert contour lines to points so we can interpolate between elevation points
+dem_points=as(shp, "SpatialPointsDataFrame")
+
+# 3) Interpolate the elevation data onto the raster grid
+dem_interp=gstat(formula=NM_COTA ~ 1, locations=dem_points,
+                 set=list(idp=0), nmax=3)
+# Obtain interpolation values for raster grid
+DEM=interpolate(dem_rast, dem_interp)  # can take time...
+
+# Shapefile con los polígonos de las 'Líneas límite municipales'
+# URL: http://centrodedescargas.cnig.es/CentroDescargas/catalogo.do?Serie=CAANE
+prov=readOGR(dsn="recintos_provinciales_inspire_peninbal_etrs89.shp", verbose=T)
+mad=subset(prov, NAMEUNIT=='Madrid')  # just Madrid
+plot(mad, axes=T)
+mad=spTransform(mad, crs(DEM))  # match CRS
+plot(mad, axes=T)
+corte=mask(DEM, mad)  # del raster interpolado estrictamente mantenemos Madrid
+writeRaster(corte, "zona_recortada.tif", overwrite=T)
+
+plot(DEM, col=viridis(200, opt="D"))
+plot(corte, col=viridis(200, opt="D"))
+plot3D(corte, col=viridis(200, opt="D"), zfac=0.5)
+
+v=getValues(corte)  # vector with values
+v=v[is.na(v)==F]
+hist(v,
+     breaks=100, xlim=c(MINHIST, MAXHIST),
+     main=paste0("Distr. altitudes Comunidad de Madrid (",
+                 length(v)," celdas interpoladas)"),
+     xlab=paste0("min / mediana / media / max = ",
+                 round(min(v)), "m / ",
+                 round(median(v)), "m / ",
+                 round(mean(v)), "m / ",
+                 round(max(v)), "m"))
+abline(v=median(v), col='red', lty='dashed', lwd=3)
+abline(v=mean(v), col='red', lty='dashed', lwd=3)
