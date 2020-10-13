@@ -9,10 +9,10 @@
 # Modelos de elevaciones en formato raster MDT25 (resolución rejilla=25m)
 # URL: http://centrodedescargas.cnig.es/CentroDescargas/index.jsp
 
-library(data.table)
+library(data.table)  # fread()
 library(tiff)
-library(rgl)
-library(raster)
+library(rgl)  # persp3d()
+library(raster)  # raster(), mask()
 
 
 # Leemos y procesamos datos raster
@@ -117,9 +117,8 @@ plot(r, col=pal(nbcol))
 # URL: https://datos.comunidad.madrid/catalogo/dataset/spacmaltimetria20m2000
 
 library(rgdal)  # readOGR()
-library(rasterVis)  # crop(), plot3D()
+library(rasterVis)  # plot3D()
 library(gstat)  # gstat()
-library(raster)
 library(viridis)  # perceptually uniform colourmaps
 # library(rgeos)  # gSimplify()
 
@@ -360,7 +359,9 @@ corte=mask(DEM, mad)  # del raster interpolado estrictamente mantenemos Madrid
 writeRaster(corte, "zona_recortada.tif", overwrite=T)
 
 plot(DEM, col=viridis(200, opt="D"))
+png("madriz.png", 2000, 2000)
 plot(corte, col=viridis(200, opt="D"))
+dev.off()
 plot3D(corte, col=viridis(200, opt="D"), zfac=0.5)
 
 v=getValues(corte)  # vector with values
