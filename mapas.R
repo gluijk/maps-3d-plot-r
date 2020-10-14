@@ -268,8 +268,10 @@ plot(mad, axes=T)
 corte=mask(DEM, mad)  # del raster interpolado estrictamente mantenemos Madrid
 writeRaster(corte, "interpolacionmask.tif", overwrite=T)
 
-plot(DEM, col=viridis(200, opt="D"))
-plot(corte, col=viridis(200, opt="D"))
+plot(DEM, col=c(gray.colors(COLS1, start=0, end=1, gamma=2.2)),
+     axes=F, box=F, legend=F)
+plot(corte, col=c(gray.colors(COLS1, start=0, end=1, gamma=2.2)),
+     axes=F, box=F, legend=F)
 plot3D(corte, col=viridis(200, opt="D"), zfac=0.5)
 
 v=getValues(corte)  # vector with values
