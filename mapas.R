@@ -1,5 +1,6 @@
 # Procesado de mapas raster y vectoriales con R
 # www.overfitting.net
+# https://www.overfitting.net/2020/10/procesado-de-mapas-raster-y-vectoriales.html
 
 
 
