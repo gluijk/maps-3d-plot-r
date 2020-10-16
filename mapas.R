@@ -285,6 +285,49 @@ hist(v,
                  round(median(v)), "m / ",
                  round(mean(v)), "m / ",
                  round(max(v)), "m"))
-abline(v=median(v), col='red', lty='dashed', lwd=3)
-abline(v=mean(v), col='red', lty='dashed', lwd=3)
+abline(v=median(v), col='red', lty='dashed', lwd=2)
+abline(v=mean(v), col='red', lty='dashed', lwd=2)
+
+
+
+# TENERIFE
+
+teide=readTIFF("tenerifecomposite.tif")  # 2710x3243
+teide[teide==0]=NaN  # mar
+
+RESOLUCION=25
+ALTO=nrow(teide)
+ANCHO=ncol(teide)
+ANCHO_m=ANCHO*RESOLUCION
+ALTO_m=ALTO*RESOLUCION
+ALTTEIDE_m=3718
+f=3  # factor relativo en altitud
+
+
+# Mapa 3D de elevaciones
+# 1406m = altitud Puig Campana
+COLS1=round((1406-ALTMIN)/10)
+COLS2=round((ALTMAX-1406)/10)
+nbcol=COLS1+COLS2
+pal=colorRampPalette(c("yellow", "orange", "red"))
+color=c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))
+zcol=cut(teide, nbcol)
+persp3d(z=teide, col=color[zcol], xlab="", ylab="", zlab="",
+        aspect=c(ALTO_m, ANCHO_m, ALTTEIDE_m*f), axes=F, box=F)
+bg3d(color="white")
+
+
+# Distribución de altitudes
+v=teide[is.na(teide)==F]*ALTTEIDE_m
+hist(v,
+     breaks=100, xlim=c(0, ALTTEIDE_m),
+     main=paste0("Distr. altitudes Tenerife (",
+                 length(v)," celdas promediadas)"),
+     xlab=paste0("min / mediana / media / max = ",
+                 round(min(v)), "m / ",
+                 round(median(v)), "m / ",
+                 round(mean(v)), "m / ",
+                 round(max(v)), "m"))
+abline(v=median(v), col='red', lty='dashed', lwd=2)
+abline(v=mean(v), col='red', lty='dashed', lwd=2)
 
