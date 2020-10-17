@@ -306,8 +306,8 @@ f=3  # factor relativo en altitud
 
 # Mapa 3D de elevaciones
 # 1406m = altitud Puig Campana
-COLS1=round((1406-ALTMIN)/10)
-COLS2=round((ALTMAX-1406)/10)
+COLS1=round((1406-0)/10)
+COLS2=round((ALTTEIDE_m-1406)/10)
 nbcol=COLS1+COLS2
 pal=colorRampPalette(c("yellow", "orange", "red"))
 color=c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))
