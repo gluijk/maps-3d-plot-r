@@ -20,13 +20,13 @@ library(raster)  # spplot(), raster(), mask()
 # 4 cuadrantes Sierra Norte de Madrid (Sierra de Guadarrama, Valle del Lozoya)
 # Cotas en m, resolución rejilla=25m
 sierra_11=data.matrix(
-    fread("PNOA_MDT25_ETRS89_HU30_0483_LID.txt", sep=" ", dec="."))
+    fread("Ficheros/CentroDeDescargas/PNOA_MDT25_ETRS89_HU30_0483_LID.txt", sep=" ", dec="."))
 sierra_12=data.matrix(
-    fread("PNOA_MDT25_ETRS89_HU30_0484_LID.txt", sep=" ", dec="."))
+    fread("Ficheros/CentroDeDescargas/PNOA_MDT25_ETRS89_HU30_0484_LID.txt", sep=" ", dec="."))
 sierra_21=data.matrix(
-    fread("PNOA_MDT25_ETRS89_HU30_0508_LID.txt", sep=" ", dec="."))
+    fread("Ficheros/CentroDeDescargas/PNOA_MDT25_ETRS89_HU30_0508_LID.txt", sep=" ", dec="."))
 sierra_22=data.matrix(
-    fread("PNOA_MDT25_ETRS89_HU30_0509_LID.txt", sep=" ", dec="."))
+    fread("Ficheros/CentroDeDescargas/PNOA_MDT25_ETRS89_HU30_0509_LID.txt", sep=" ", dec="."))
 
 # Eliminar solapes y crop final (valores obtenidos manualmente)
 sierra=matrix(0, nrow=1508, ncol=2269)
@@ -36,26 +36,32 @@ sierra[741:1499, 1:1141]=sierra_21
 sierra[754:1508, 1129:2265]=sierra_22
 sierra=sierra[14:1499, 11:2265]
 rm(sierra_11, sierra_12, sierra_21, sierra_22)
-
 dim(sierra)  # -> 1486 x 2255
-ALTMIN=min(sierra)
-ALTMAX=max(sierra)
+
+RESOLUCION=25
 ALTO=nrow(sierra)
 ANCHO=ncol(sierra)
-writeTIFF(((sierra-ALTMIN)/(ALTMAX-ALTMIN))**(1/2.2),
+ALTO_m=ALTO*RESOLUCION
+ANCHO_m=ANCHO*RESOLUCION
+ALTMIN_m=min(sierra)
+ALTMAX_m=max(sierra)
+f=3  # factor relativo en altitud
+
+# Guardamos raster en TIFF
+writeTIFF((sierra/ALTMAX_m),
           "sierra.tif", bits.per.sample=16, compression="LZW")
 
 
 # Mapa 3D de elevaciones
 # 1406m = altitud Puig Campana
-COLS1=round((1406-ALTMIN)/10)
-COLS2=round((ALTMAX-1406)/10)
+COLS1=round((1406-ALTMIN_m)/10)
+COLS2=round((ALTMAX_m-1406)/10)
 nbcol=COLS1+COLS2
 pal=colorRampPalette(c("yellow", "orange", "red"))
 color=c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))
 zcol=cut(sierra, nbcol)
 persp3d(z=sierra, col=color[zcol], xlab="", ylab="", zlab="",
-        aspect=c(1, ANCHO/ALTO, 0.15), axes=F, box=F)
+        aspect=c(ALTO_m, ANCHO_m, ALTMAX_m*f), axes=F, box=F)
 bg3d(color="black")
 
 
@@ -83,7 +89,7 @@ pal=colorRampPalette(c(rgb(0.8,0.6,0), rgb(0.8,0.6,0), rgb(0.8,0.6,0),
 color=pal(nbcol)
 zcol=cut(pend_ns, nbcol)
 persp3d(z=sierra, col=color[zcol], xlab="", ylab="", zlab="",
-        aspect=c(1, ANCHO/ALTO, 0.2), axes=F, box=F)
+        aspect=c(ALTO_m, ANCHO_m, ALTMAX_m*f), axes=F, box=F)
 
 clear3d("lights")
 light3d(x=10, y=0, z=10, viewpoint.rel=F, diffuse = "#FFFFFF")
@@ -298,8 +304,8 @@ teide[teide==0]=NaN  # mar
 RESOLUCION=25
 ALTO=nrow(teide)
 ANCHO=ncol(teide)
-ANCHO_m=ANCHO*RESOLUCION
 ALTO_m=ALTO*RESOLUCION
+ANCHO_m=ANCHO*RESOLUCION
 ALTTEIDE_m=3718
 f=3  # factor relativo en altitud
 
