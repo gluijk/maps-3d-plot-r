@@ -158,10 +158,10 @@ coordinates(test)=~ x + y
 proj4string(test)="+init=epsg:28992"
 
 # Plot shapefile
-# viridis:  opt = A: magma; B: inferno; C: plasma; D: viridis; E: 
+# viridis(opt = A: magma; B: inferno; C: plasma; D: viridis; E: cividis)
 spplot(shp, zcol=c('NM_COTA'), lwd=0.05,
        sp.layout=list("sp.points", test, pch=13, cex=5, lwd=2, col="red"),
-       col.regions=viridis(20, opt="D"))
+       col.regions=viridis(200, opt="D"))
 
 # Comparación con el Puig Campana
 # 1406m = altitud Puig Campana
@@ -191,7 +191,7 @@ length(shp_crop)
 
 spplot(shp_crop, zcol=c('NM_COTA'), lwd=0.05,
        sp.layout=list("sp.points", test, pch=13, cex=5, lwd=2, col="red"),
-       col.regions=viridis(20, opt="D"))
+       col.regions=viridis(200, opt="D"))
 
 # Interpolamos raster a partir de los datos vectoriales
 # 1) Create a blank raster grid to interpolate the elevation data onto
@@ -221,7 +221,7 @@ DEM=interpolate(dem_rast, dem_interp)  # can take time...
 # Dibujamos el raster interpolado en 2D (curvas) y 3D (elevaciones):
                                                                  
 # Plot 2D DEM adding original contour lines
-plot(DEM, col=viridis(200, opt="D"))  # terrain.colors(20))
+plot(DEM, col=viridis(200, opt="D"))  # terrain.colors(200))
 contour_plot=shp_crop[(shp_crop$NM_COTA) %in% 
                           seq(min(shp_crop$NM_COTA), 
                               max(shp_crop$NM_COTA), 
