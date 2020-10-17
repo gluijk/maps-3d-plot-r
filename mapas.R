@@ -205,10 +205,10 @@ dem_rast=raster(nrows=ANCHO_INTERP, ncols=ANCHO_INTERP,  # create raster grid
 
 projection(dem_rast)=CRS(projection(shp_crop))  # set projection
 dim(dem_rast)
-res(dem_rast)=5  # set resolution: the pixel size of the raster is defined: 5m x 5m pixel
-dim(dem_rast)
+res(dem_rast)=5  # set resolution: pixel size of the raster is defined: 5m x 5m
+dim(dem_rast)  # raster size has changed
 
-# 2) Convert contour lines to points so we can interpolate between elevation points
+# 2) Convert contour lines to points to interpolate between elevation points
 dem_points=as(shp_crop, "SpatialPointsDataFrame")
 
 # 3) Interpolate the elevation data onto the raster grid
@@ -255,7 +255,7 @@ dem_rast=raster(nrows=ANCHO_INTERP, ncols=round(ANCHO_INTERP*
 projection(dem_rast)=CRS(projection(shp))  # set projection
 dim(dem_rast)
 
-# 2) Convert contour lines to points so we can interpolate between elevation points
+# 2) Convert contour lines to points to interpolate between elevation points
 dem_points=as(shp, "SpatialPointsDataFrame")
 
 # 3) Interpolate the elevation data onto the raster grid
