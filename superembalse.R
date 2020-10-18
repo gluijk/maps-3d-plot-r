@@ -104,8 +104,8 @@ for (f in 0:(N-1)) {
     par3d(FOV=40, zoom=0.6, userMatrix=um,
           windowRect=c(100, 100, WIDTH+100, HEIGHT+100))
     
-    nombre=paste0("inundacionlozoya_", ifelse(f<10, "00",
-                                              ifelse(f<100, "0", "")),f, ".png")
+    nombre=paste0("inundacionlozoya_",
+                  ifelse(f<10, "00", ifelse(f<100, "0", "")), f, ".png")
     snapshot3d(nombre, fmt="png", top=T)
     rgl.close()
     
