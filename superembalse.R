@@ -115,7 +115,6 @@ for (f in 0:(N-1)) {
     frame=frame[201:HEIGHT, 1:1450,]  # recorte
     writePNG(image=frame, target=nombre)
     
-    indices=which
     print(paste0("Frame ", f+1, "/", N, " - h=", h))
 }
 
@@ -161,15 +160,3 @@ image(t(sierra[nrow(sierra):1,])-min(sierra),
       col=c(c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))),
       useRaster=T,
       asp=nrow(sierra)/ncol(sierra), axes=F)
-
-
-LOZOYA 3000
-
-Estamos en el futuro. La población de Neo Madrid alcanza los 20 millones
-de habitantes, lo que unido a unos períodos de sequía cada vez más duraderos
-e intensos obligan a aumentar drásticamente el almacenamiento de recursos
-hídricos de la región. La solución: LOZOYA 3000, mega embalse en el Valle
-del Lozoya.
-
-
-
