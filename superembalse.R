@@ -21,13 +21,13 @@ library(png)
 # 4 cuadrantes Sierra Norte de Madrid (Sierra de Guadarrama, Valle del Lozoya)
 # Cotas en m, resolución rejilla=25m
 sierra_11=data.matrix(
-    fread("Ficheros/CentroDeDescargas/PNOA_MDT25_ETRS89_HU30_0483_LID.txt", sep=" ", dec="."))
+    fread("PNOA_MDT25_ETRS89_HU30_0483_LID.txt", sep=" ", dec="."))
 sierra_12=data.matrix(
-    fread("Ficheros/CentroDeDescargas/PNOA_MDT25_ETRS89_HU30_0484_LID.txt", sep=" ", dec="."))
+    fread("PNOA_MDT25_ETRS89_HU30_0484_LID.txt", sep=" ", dec="."))
 sierra_21=data.matrix(
-    fread("Ficheros/CentroDeDescargas/PNOA_MDT25_ETRS89_HU30_0508_LID.txt", sep=" ", dec="."))
+    fread("PNOA_MDT25_ETRS89_HU30_0508_LID.txt", sep=" ", dec="."))
 sierra_22=data.matrix(
-    fread("Ficheros/CentroDeDescargas/PNOA_MDT25_ETRS89_HU30_0509_LID.txt", sep=" ", dec="."))
+    fread("PNOA_MDT25_ETRS89_HU30_0509_LID.txt", sep=" ", dec="."))
 
 # Eliminar solapes y crop final (valores obtenidos manualmente)
 sierra=matrix(0, nrow=1508, ncol=2269)
