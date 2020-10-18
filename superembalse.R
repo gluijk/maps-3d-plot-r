@@ -41,6 +41,7 @@ dim(sierra)  # -> 1486 x 2255
 
 ALTO=nrow(sierra)
 ANCHO=ncol(sierra)
+# Hacemos zoom en el área del Valle del Lozoya
 sierra=sierra[1:(ALTO*2/3+200), (ANCHO*1/3-200):(ANCHO*1/3+ALTO*2/3-1)]
 dim(sierra)
 sierraBK=sierra
@@ -87,7 +88,6 @@ for (f in 0:(N-1)) {
                       col(sierra)<(264-1084)/1190*row(sierra)+1084 &
                       col(sierra)<(1190-900)/614*row(sierra)+900 &
                       sierra<h)
-    
     sierra[indices]=h
     
     # Mapa 3D de elevaciones
