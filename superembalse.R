@@ -12,22 +12,21 @@
 
 library(data.table)  # fread()
 library(tiff)
-library(rgl)  # persp3d()
-library(raster)  # spplot(), raster(), mask()
 library(png)
+library(rgl)  # persp3d()
 
 
 # Leemos y procesamos datos raster
 # 4 cuadrantes Sierra Norte de Madrid (Sierra de Guadarrama, Valle del Lozoya)
 # Cotas en m, resolución rejilla=25m
 sierra_11=data.matrix(
-    fread("PNOA_MDT25_ETRS89_HU30_0483_LID.txt", sep=" ", dec="."))
+    fread("Ficheros/CentroDeDescargas/PNOA_MDT25_ETRS89_HU30_0483_LID.txt", sep=" ", dec="."))
 sierra_12=data.matrix(
-    fread("PNOA_MDT25_ETRS89_HU30_0484_LID.txt", sep=" ", dec="."))
+    fread("Ficheros/CentroDeDescargas/PNOA_MDT25_ETRS89_HU30_0484_LID.txt", sep=" ", dec="."))
 sierra_21=data.matrix(
-    fread("PNOA_MDT25_ETRS89_HU30_0508_LID.txt", sep=" ", dec="."))
+    fread("Ficheros/CentroDeDescargas/PNOA_MDT25_ETRS89_HU30_0508_LID.txt", sep=" ", dec="."))
 sierra_22=data.matrix(
-    fread("PNOA_MDT25_ETRS89_HU30_0509_LID.txt", sep=" ", dec="."))
+    fread("Ficheros/CentroDeDescargas/PNOA_MDT25_ETRS89_HU30_0509_LID.txt", sep=" ", dec="."))
 
 # Eliminar solapes y crop final (valores obtenidos manualmente)
 sierra=matrix(0, nrow=1508, ncol=2269)
@@ -37,17 +36,16 @@ sierra[741:1499, 1:1141]=sierra_21
 sierra[754:1508, 1129:2265]=sierra_22
 sierra=sierra[14:1499, 11:2265]
 
-dim(sierra)  # -> 1486 x 2255
+dim(sierra)  # 1486 x 2255
 
 ALTO=nrow(sierra)
 ANCHO=ncol(sierra)
-# Hacemos zoom en el área del Valle del Lozoya
+# Zoom en el área del Valle del Lozoya
 sierra=sierra[1:(ALTO*2/3+200), (ANCHO*1/3-200):(ANCHO*1/3+ALTO*2/3-1)]
-dim(sierra)
+dim(sierra)  # 1190 x 1190
 sierraBK=sierra
 
-RESOLUCION=25
-d=25  # resolución rejilla=25m
+RESOLUCION=25  # resolución rejilla=25m
 ALTO=nrow(sierra)
 ANCHO=ncol(sierra)
 ALTO_m=ALTO*RESOLUCION
@@ -58,7 +56,7 @@ fZ=2  # factor relativo en altitud
 
 
 # Guardamos raster en TIFF
-writeTIFF((sierra/ALTMAX_m), paste0("sierra_",ALTAGUA,".tif"),
+writeTIFF((sierra/ALTMAX_m), paste0("sierra.tif"),
           bits.per.sample=16, compression="LZW")
 
 # Mapa 3D de elevaciones
@@ -133,7 +131,7 @@ for (h in INUNDAMIN:INUNDAMAX) {  # tramos de 1m de alto
                       col(sierra)<(1190-900)/614*row(sierra)+900 &
                       sierra<h)
     nivel=c(nivel, h)
-    volm3=c(volm3, length(indices)*d^2)  # metros cúbicos almacenados en h
+    volm3=c(volm3, length(indices)*RESOLUCION^2)  # metros cúbicos almacenados en h
 }
 
 
@@ -141,16 +139,16 @@ plot(nivel, volm3/1000000, type='l', col='red',
      main='Capacidad por cota de altitud',
      ylab='hm3', xlab='cota (m)')
 
-plot(nivel-nivel[1], cumsum(vm3/1000000), type='l', col='red',
+plot(nivel-nivel[1], cumsum(volm3/1000000), type='l', col='red',
      main='Capacidad acumulada por nivel de llenado',
      ylab='hm3', xlab='nivel de llenado (m)')
 
 NUM=length(nivel)
 print(paste0("Capacidad máx. del embalse: ", round(sum(volm3)/1000000), "hm3"))
 print(paste0("Superficie máx. del embalse: ", round(volm3[NUM]/1000000), "km2"))
-print(paste0("Altura máx. de la presa: ", nivel[NUM]-nivel[1],"m"))
-print(paste0("Longitud de la presa: ", round((104^2+151^2)^0.5*d/1000,
-                                             digits=1),"km"))
+print(paste0("Altura máx. de la presa: ", nivel[NUM]-nivel[1], "m"))
+print(paste0("Longitud de la presa: ", round((104^2+151^2)^0.5*RESOLUCION/1000,
+                                             digits=1), "km"))
 # La presa más alta del mundo se encuentra en el río Vakhsk, en Tayikistán
 # y tiene una altura de 300m
 
