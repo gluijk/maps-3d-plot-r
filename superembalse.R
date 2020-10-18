@@ -75,7 +75,7 @@ HEIGHT=1000  # 800  # 960  # 600  # 384
 # Rango inundación: 1060 -> 1450
 INUNDAMIN=1060
 INUNDAMAX=1450
-SCALE=INUNDAMAX-INUNDAMIN # Factor de escala
+SCALE=INUNDAMAX-INUNDAMIN  # rango cotas
 
 ref=readPNG("inundacionlozoyaREF.png")  # imagen inicial sin agua
 for (f in 0:(N-1)) {
