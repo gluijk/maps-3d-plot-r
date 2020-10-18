@@ -124,7 +124,7 @@ for (f in 0:(N-1)) {
 # La separamos del bucle anterior por precisión y sencillez
 nivel=c()
 volm3=c()
-for (h in INUNDAMIN:INUNDAMAX) {  # tramos de 1m de alto
+for (h in INUNDAMIN:INUNDAMAX) {  # recorremos secciones de 1m de alto
     sierra=sierraBK
     indices=which(row(sierra)<ALTO-400 &
                       col(sierra)>336 &
@@ -132,7 +132,7 @@ for (h in INUNDAMIN:INUNDAMAX) {  # tramos de 1m de alto
                       col(sierra)<(1190-900)/614*row(sierra)+900 &
                       sierra<h)
     nivel=c(nivel, h)
-    volm3=c(volm3, length(indices)*RESOLUCION^2)  # metros cúbicos almacenados en h
+    volm3=c(volm3, length(indices)*RESOLUCION^2)  # m3 almacenados en h
 }
 
 
