@@ -48,8 +48,7 @@ ALTMAX_m=max(sierra)
 f=3  # factor relativo en altitud
 
 # Guardamos raster en TIFF
-writeTIFF((sierra/ALTMAX_m),
-          "sierra.tif", bits.per.sample=16, compression="LZW")
+writeTIFF(sierra/ALTMAX_m, "sierra.tif", bits.per.sample=16, compression="LZW")
 
 
 # Mapa 3D de elevaciones

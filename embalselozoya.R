@@ -56,8 +56,7 @@ fZ=2  # factor relativo en altitud
 
 
 # Guardamos raster en TIFF
-writeTIFF((sierra/ALTMAX_m), paste0("sierra.tif"),
-          bits.per.sample=16, compression="LZW")
+writeTIFF(sierra/ALTMAX_m, "sierra.tif", bits.per.sample=16, compression="LZW")
 
 # Mapa 3D de elevaciones
 ALTAGUA=1450
@@ -157,5 +156,4 @@ print(paste0("Longitud de la presa grande: ",
 image(t(sierra[nrow(sierra):1,])-min(sierra),
       col=c(c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))),
       #col=color,
-      useRaster=T,
-      asp=nrow(sierra)/ncol(sierra), axes=F)
+      useRaster=T, asp=ALTO/ANCHO, axes=F)
