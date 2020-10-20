@@ -54,7 +54,6 @@ ALTMIN_m=min(sierra)
 ALTMAX_m=max(sierra)
 fZ=2  # factor relativo en altitud
 
-
 # Guardamos raster en TIFF
 writeTIFF(sierra/ALTMAX_m, "sierra.tif", bits.per.sample=16, compression="LZW")
 
@@ -66,12 +65,11 @@ nbcol=COLS1+COLS2
 pal=colorRampPalette(c("yellow", "orange", "red"))
 color=c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))
 
-
 N=100
 WIDTH=1600  # 1280  # 800  # 512  # Resolución de salida
 HEIGHT=1000  # 800  # 960  # 600  # 384
 
-# Rango inundación: 1060 -> 1450
+# Rango llenado: 1060 -> 1450
 INUNDAMIN=1060
 INUNDAMAX=1450
 SCALE=INUNDAMAX-INUNDAMIN  # rango cotas
@@ -116,11 +114,10 @@ for (f in 0:(N-1)) {
     print(paste0("Frame ", f+1, "/", N, " - h=", h))
 }
 
+
 # Parámetros del embalse
 # (Ref.: embalse de El Atazar: 426hm3)
-
-# Estimación capacidad del embalse en m3
-# La separamos del bucle anterior por precisión y sencillez
+# Separamos del bucle anterior por precisión y sencillez
 nivel=c()
 volm3=c()
 for (h in INUNDAMIN:INUNDAMAX) {  # recorremos secciones de 1m de alto
@@ -133,7 +130,6 @@ for (h in INUNDAMIN:INUNDAMAX) {  # recorremos secciones de 1m de alto
     nivel=c(nivel, h)
     volm3=c(volm3, length(indices)*RESOLUCION^2)  # m3 almacenados en h
 }
-
 
 plot(nivel, volm3/1000000, type='l', col='red',
      main='Capacidad por cota de altitud',
@@ -151,6 +147,13 @@ print(paste0("Longitud de la presa grande: ",
 
 
 # Mapa raster 2D
+sierra=sierraBK
+indices=which(row(sierra)<ALTO-400 &
+                  col(sierra)>336 &
+                  col(sierra)<(264-1084)/1190*row(sierra)+1084 &
+                  col(sierra)<(1190-900)/614*row(sierra)+900 &
+                  sierra<INUNDAMAX)
+sierra[indices]=INUNDAMAX-1  # color diferenciado
 image(t(sierra[nrow(sierra):1,])-min(sierra),
       col=c(c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))),
       #col=color,
