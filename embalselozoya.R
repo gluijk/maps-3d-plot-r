@@ -74,7 +74,7 @@ INUNDAMIN=1060
 INUNDAMAX=1450
 SCALE=INUNDAMAX-INUNDAMIN  # rango cotas
 
-ref=readPNG("embalselozoyaVACIO.png")  # imagen inicial sin agua
+ref=readPNG("embalselozoya_VACIO.png")  # imagen inicial sin agua
 for (f in 0:(N-1)) {
     h=SCALE*(1-cos(2*pi*f/N))/2+INUNDAMIN
     sierra=sierraBK
