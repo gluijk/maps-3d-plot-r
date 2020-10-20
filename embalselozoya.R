@@ -138,11 +138,9 @@ for (h in INUNDAMIN:INUNDAMAX) {  # recorremos secciones de 1m de alto
 plot(nivel, volm3/1000000, type='l', col='red',
      main='Capacidad por cota de altitud',
      ylab='hm3', xlab='Cota (m)')
-png("capacidadpornivelllenado.png",512,400)
 plot(nivel-nivel[1], cumsum(volm3/1000000), type='l', col='red',
      main='Capacidad acumulada por nivel de llenado',
      ylab='hm3', xlab='Nivel de llenado (m)')
-dev.off()
 
 NUM=length(nivel)
 print(paste0("Capacidad máx. del embalse: ", round(sum(volm3)/1000000), "hm3"))
