@@ -98,7 +98,7 @@ for (f in 0:(N-1)) {
 
     view3d(theta=0, phi=-60)  # ajuste de phi
     um=par3d()$userMatrix
-    um=rotate3d(um, angle=-pi-pi/8, x=0, y=0, z=1)
+    um=rotate3d(um, angle=-pi-pi/8, x=0, y=0, z=0)
     par3d(FOV=40, zoom=0.6, userMatrix=um,
           windowRect=c(100, 100, WIDTH+100, HEIGHT+100))
     
@@ -153,7 +153,10 @@ indices=which(row(sierra)<ALTO-400 &
                   col(sierra)<(264-1084)/1190*row(sierra)+1084 &
                   col(sierra)<(1190-900)/614*row(sierra)+900 &
                   sierra<INUNDAMAX)
-sierra[indices]=INUNDAMAX-1  # color diferenciado
+sierra[indices]=INUNDAMAX
+color=c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))
+POS=round((INUNDAMAX-ALTMIN_m)/1)
+color[POS+1]="#66EEFF"  # color del agua
 image(t(sierra[nrow(sierra):1,])-min(sierra),
-      col=c(c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))),
+      col=color,  #c(c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))),
       useRaster=T, asp=ALTO/ANCHO, axes=F)
