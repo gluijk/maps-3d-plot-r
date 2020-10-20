@@ -97,7 +97,7 @@ rgl.light(x=0, y=0, z=150, viewpoint.rel=T, ambient="#000000",
           diffuse="#FFFFFF", specular="#000000")
 view3d(theta=0, phi=0)  # visión cenital
 um=par3d()$userMatrix
-um=rotate3d(um, -pi/2, 0, 0, 1)
+um=rotate3d(um, angle=-pi/2, x=0, y=0, z=1)
 par3d(FOV=0, zoom=1, userMatrix=um)  # axonométrica
 
 

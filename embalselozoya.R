@@ -100,7 +100,7 @@ for (f in 0:(N-1)) {
 
     view3d(theta=0, phi=-60)  # ajuste de phi
     um=par3d()$userMatrix
-    um=rotate3d(um, -pi-pi/8, 0, 0, 1)
+    um=rotate3d(um, angle=-pi-pi/8, x=0, y=0, z=1)
     par3d(FOV=40, zoom=0.6, userMatrix=um,
           windowRect=c(100, 100, WIDTH+100, HEIGHT+100))
     
