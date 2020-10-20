@@ -156,5 +156,4 @@ indices=which(row(sierra)<ALTO-400 &
 sierra[indices]=INUNDAMAX-1  # color diferenciado
 image(t(sierra[nrow(sierra):1,])-min(sierra),
       col=c(c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))),
-      #col=color,
       useRaster=T, asp=ALTO/ANCHO, axes=F)
