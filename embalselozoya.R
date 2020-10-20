@@ -158,5 +158,4 @@ color=c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))
 POS=round((INUNDAMAX-ALTMIN_m)/1)
 color[POS+1]="#66EEFF"  # color del agua
 image(t(sierra[nrow(sierra):1,])-min(sierra),
-      col=color,  #c(c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))),
-      useRaster=T, asp=ALTO/ANCHO, axes=F)
+      col=color, useRaster=T, asp=ALTO/ANCHO, axes=F)
