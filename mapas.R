@@ -146,6 +146,11 @@ crs(shp)  # +proj=utm +zone=30 +ellps=GRS80 +towgs84= (...) +units=m +no_defs
 proj4string(shp)  # projection (UTM)
 bbox(shp)  # X-Y bounding box in UTM coordinates
 
+dem_points=as(shp, "SpatialPointsDataFrame")
+print(paste0(length(shp), " líneas (curvas de nivel) con ",
+             length(dem_points), " puntos (",
+             round(length(dem_points)/length(shp)), " puntos/línea)"))
+
 
 # Manzanares el Real (Plaza del Ayto.)
 # UTM: North=4508778.29, East=426956.57, Zone=30T
