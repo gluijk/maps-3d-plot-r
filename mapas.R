@@ -146,6 +146,7 @@ crs(shp)  # +proj=utm +zone=30 +ellps=GRS80 +towgs84= (...) +units=m +no_defs
 proj4string(shp)  # projection (UTM)
 bbox(shp)  # X-Y bounding box in UTM coordinates
 
+# Conversión de líneas a puntos para conteo
 dem_points=as(shp, "SpatialPointsDataFrame")
 print(paste0(length(shp), " líneas (curvas de nivel) con ",
              length(dem_points), " puntos (",
