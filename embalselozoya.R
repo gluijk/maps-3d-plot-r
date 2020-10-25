@@ -1,7 +1,11 @@
-# Procesado de mapas raster y vectoriales con R (EMBALSE LOZOYA)
+# Simulación de embalse en el Valle del Lozoya con R
 # www.overfitting.net
-# https://www.overfitting.net/2020/10/procesado-de-mapas-raster-y-vectoriales.html
+# https://www.overfitting.net/2020/10/simulacion-de-embalse-en-el-valle-del.html
 
+library(data.table)  # fread()
+library(tiff)
+library(png)
+library(rgl)  # persp3d()
 
 
 # DIBUJANDO MAPA 3D DE ELEVACIONES DESDE DATOS RASTER
@@ -9,12 +13,6 @@
 # Centro de Descargas del Centro Nacional de Información Geográfica
 # Modelos de elevaciones en formato raster MDT25 (resolución rejilla=25m)
 # URL: http://centrodedescargas.cnig.es/CentroDescargas/index.jsp
-
-library(data.table)  # fread()
-library(tiff)
-library(png)
-library(rgl)  # persp3d()
-
 
 # Leemos y procesamos datos raster
 # 4 cuadrantes Sierra Norte de Madrid (Sierra de Guadarrama, Valle del Lozoya)
