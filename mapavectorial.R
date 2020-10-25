@@ -138,13 +138,16 @@ DEM=interpolate(dem_rast, dem_interp)  # can take time... (5min)
 
 # Dibujamos el raster interpolado en 2D (curvas) y 3D (elevaciones):
                                                                  
-# Plot 2D DEM adding original contour lines
-plot(DEM, col=viridis(200, opt="D"))  # terrain.colors(200))
+# Plot 2D DEM
+plot(DEM, col=viridis(200, opt="D"), axes=F)
+plot(test, pch=13, cex=5, lwd=2, col="red", add=T)
+# add original contour lines
 contour_plot=shp_crop[(shp_crop$NM_COTA) %in% 
                           seq(min(shp_crop$NM_COTA), 
                               max(shp_crop$NM_COTA), 
                               20), ]  # 20m contour lines
 plot(contour_plot, add=T, lwd=0.1)
+
 
 # Plot 3D DEM using rgl
 plot3D(DEM, col=viridis(200, opt="D"), zfac=1)
@@ -186,9 +189,12 @@ DEM=interpolate(dem_rast, dem_interp)  # can take time... (25min!)
 # URL: http://centrodedescargas.cnig.es/CentroDescargas/catalogo.do?Serie=CAANE
 prov=readOGR(dsn="recintos_provinciales_inspire_peninbal_etrs89.shp", verbose=T)
 mad=subset(prov, NAMEUNIT=='Madrid')  # just Madrid
-plot(mad, axes=T)
+
+# Dibujar Madrid en polígonos
+plot(mad, axes=T, xlab="Longitude", ylab="Latitude")  # Lat/Long
 mad=spTransform(mad, crs(DEM))  # match CRS
-plot(mad, axes=T, xlab="UTM x (m)", ylab="UTM y (m)")
+plot(mad, axes=T, xlab="UTM x (m)", ylab="UTM y (m)")  # coords. UTM
+plot(test, pch=13, cex=5, lwd=2, col="red", add=T)
 
 corte=mask(DEM, mad)  # del raster interpolado estrictamente mantenemos Madrid
 writeRaster(corte, "interpolacionmask.tif", overwrite=T)
