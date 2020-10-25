@@ -141,7 +141,7 @@ DEM=interpolate(dem_rast, dem_interp)  # can take time... (5min)
 # Plot 2D DEM
 plot(DEM, col=viridis(200, opt="D"), axes=F)
 plot(test, pch=13, cex=5, lwd=2, col="red", add=T)
-# add original contour lines
+# Add original contour lines
 contour_plot=shp_crop[(shp_crop$NM_COTA) %in% 
                           seq(min(shp_crop$NM_COTA), 
                               max(shp_crop$NM_COTA), 
