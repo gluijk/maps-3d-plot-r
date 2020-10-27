@@ -159,8 +159,6 @@ plot3D(DEM, col=viridis(200, opt="D"), zfac=1)
 MINHIST=min(shp$NM_COTA)
 MAXHIST=max(shp$NM_COTA)
 
-# Distr. altitudes Comunidad de Madrid
-
 # Interpolamos raster a partir de los datos vectoriales
 # 1) Create a blank raster grid to interpolate the elevation data onto
 dem_bbox=bbox(shp)  # obtain extent
