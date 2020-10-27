@@ -139,7 +139,7 @@ DEM=interpolate(dem_rast, dem_interp)  # can take time... (5min)
 # Dibujamos el raster interpolado en 2D (curvas) y 3D (elevaciones):
                                                                  
 # Plot 2D DEM
-plot(DEM, col=viridis(200, opt="D"), axes=F)
+plot(DEM, col=viridis(200, opt="D"), axes=F, box=F, legend=F)
 plot(test, pch=13, cex=5, lwd=2, col="red", add=T)
 # Add original contour lines
 contour_plot=shp_crop[(shp_crop$NM_COTA) %in% 
@@ -203,7 +203,6 @@ plot(DEM, col=c(gray.colors(100, start=0, end=1, gamma=2.2)),
      axes=F, box=F, legend=F)
 plot(corte, col=c(gray.colors(100, start=0, end=1, gamma=2.2)),
      axes=F, box=F, legend=F)
-plot3D(corte, col=viridis(200, opt="D"), zfac=0.5)
 
 v=getValues(corte)  # vector with values
 v=v[is.na(v)==F]
@@ -219,3 +218,6 @@ hist(v,
 abline(v=median(v), col='red', lty='dashed', lwd=2)
 abline(v=mean(v), col='red', lty='dashed', lwd=2)
 
+
+# Madrid en 3D
+plot3D(corte, col=viridis(200, opt="D"), zfac=0.5)
