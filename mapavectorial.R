@@ -17,7 +17,7 @@ library(viridis)  # perceptually uniform colourmaps
 
 shp=readOGR(dsn="SIGI_MA_ALTIMETRIA_20Line.shp", verbose=T)
 # ESRI shapefile format: only three vector types: points, lines and polygons
-# A shapefile consists of various files with same name and tehse extensions:
+# A shapefile consists of various files with same name and these extensions:
 #  .shp (the geometry)
 #  .dbf (the attributes)
 #  .shx (the index that links the two)

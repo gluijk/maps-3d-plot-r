@@ -61,7 +61,7 @@ COLS1=round((ALTAGUA-ALTMIN_m)/1)
 COLS2=round((ALTMAX_m-ALTAGUA)/1)
 nbcol=COLS1+COLS2
 pal=colorRampPalette(c("yellow", "orange", "red"))
-color=c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))
+# color=c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))
 
 N=100
 WIDTH=1600  # 1280  # 800  # 512  # Resolución de salida
@@ -155,5 +155,5 @@ sierra[indices]=INUNDAMAX
 color=c(gray.colors(COLS1, start=0, end=1, gamma=2.2), pal(COLS2))
 POS=round((INUNDAMAX-ALTMIN_m)/1)
 color[POS+1]="#66EEFF"  # color del agua
-image(t(sierra[nrow(sierra):1,])-min(sierra),
+image(t(sierra[nrow(sierra):1,]),
       col=color, useRaster=T, asp=ALTO/ANCHO, axes=F)
