@@ -9,13 +9,13 @@ library(rgl)  # persp3d()
 
 # DIBUJANDO MAPA 3D DE ELEVACIONES DESDE DATOS RASTER
 
-# Centro de Descargas del Centro Nacional de Informaci髇 Geogr醘ica
-# Modelos de elevaciones en formato raster MDT25 (resoluci髇 rejilla=25m)
+# Centro de Descargas del Centro Nacional de Informaci贸n Geogr谩fica
+# Modelos de elevaciones en formato raster MDT25 (resoluci贸n rejilla=25m)
 # URL: http://centrodedescargas.cnig.es/CentroDescargas/index.jsp
 
 # Leemos y procesamos datos raster
 # 4 cuadrantes Sierra Norte de Madrid (Sierra de Guadarrama, Valle del Lozoya)
-# Cotas en m, resoluci髇 rejilla=25m
+# Cotas en m, resoluci贸n rejilla=25m
 sierra_11=data.matrix(
     fread("PNOA_MDT25_ETRS89_HU30_0483_LID.txt", sep=" ", dec="."))
 sierra_12=data.matrix(
@@ -60,7 +60,7 @@ persp3d(z=sierra, col=color[zcol], xlab="", ylab="", zlab="",
         aspect=c(ALTO_m, ANCHO_m, ALTMAX_m*f), axes=F, box=F)
 
 
-# Mapa de insolaci髇 N-S
+# Mapa de insolaci贸n N-S
 d=25  # cell size=25m
 i=which(row(sierra)>1 & row(sierra)<ALTO)  # skip first and last row
 pend_ns=sierra*0
@@ -74,9 +74,9 @@ pend_ns[pend_ns < -PENDMAX]=-PENDMAX
 pend_ns[pend_ns > PENDMAX]=PENDMAX
 
 
-# Opci髇 1: mapa 3D en visi髇 axonom閠rica
+# Opci贸n 1: mapa 3D en visi贸n axonom茅trica
 # NOTA: sierra y pend_ns deben tener las mismas dimensiones
-# para poder usar el primero como elevaci髇 y el segundo como color
+# para poder usar el primero como elevaci贸n y el segundo como color
 nbcol=100
 pal=colorRampPalette(c(rgb(0.8,0.6,0), rgb(0.8,0.6,0), rgb(0.8,0.6,0),
                        rgb(0.5,0.5,0.5),
@@ -91,13 +91,13 @@ light3d(x=10, y=0, z=10, viewpoint.rel=F, diffuse = "#FFFFFF")
 light3d(x=-10, y=0, z=10, viewpoint.rel=F, diffuse = "#FFFFFF")
 rgl.light(x=0, y=0, z=150, viewpoint.rel=T, ambient="#000000",
           diffuse="#FFFFFF", specular="#000000")
-view3d(theta=0, phi=0)  # visi髇 cenital
+view3d(theta=0, phi=0)  # visi贸n cenital
 um=par3d()$userMatrix
 um=rotate3d(um, angle=-pi/2, x=0, y=0, z=1)
-par3d(FOV=0, zoom=1, userMatrix=um)  # axonom閠rica
+par3d(FOV=0, zoom=1, userMatrix=um)  # axonom茅trica
 
 
-# Opci髇 2: mapa 2D
+# Opci贸n 2: mapa 2D
 nbcol=100
 pal=colorRampPalette(c(rgb(0,1,0), rgb(0,1,0), rgb(0,1,0),
                        rgb(0.5,0.5,0.5),
@@ -133,12 +133,12 @@ persp3d(z=teide, col=color[zcol], xlab="", ylab="", zlab="",
         aspect=c(ALTO_m, ANCHO_m, ALTTEIDE_m*f), axes=F, box=F)
 
 
-# Distribuci髇 de altitudes
+# Distribuci贸n de altitudes
 v=teide[is.na(teide)==F]*ALTTEIDE_m
 hist(v,
      breaks=100, xlim=c(0, ALTTEIDE_m),
      main=paste0("Distr. altitudes Tenerife (",
-                 length(v)," celdas promediadas)"),
+                 length(v)," celdas interpoladas)"),
      xlab=paste0("min / mediana / media / max = ",
                  round(min(v)), "m / ",
                  round(median(v)), "m / ",
